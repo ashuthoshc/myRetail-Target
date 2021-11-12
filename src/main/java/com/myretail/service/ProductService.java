@@ -33,9 +33,15 @@ public class ProductService {
      * @throws Exception
      */
     public Product getProductInfo(Long productID) throws Exception {
-        ProductName productName = productNameService.getProductName(productID);
-        ProductPrice productPrice = productPriceRepository.getProductPrice(productID);
-        return constructProduct(productID, productPrice, productName);
+        Product product;
+        try {
+            ProductName productName = productNameService.getProductName(productID);
+            ProductPrice productPrice = productPriceRepository.getProductPrice(productID);
+            product = constructProduct(productID, productPrice, productName);
+        } catch (Exception e){
+            throw e;
+        }
+        return product;
     }
 
     /**

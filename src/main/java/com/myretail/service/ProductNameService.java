@@ -47,11 +47,11 @@ public class ProductNameService {
             endPointResponse = response.getBody();
 
         } catch (HttpClientErrorException e) {
-            e.printStackTrace();
-            throw new ProductNotFoundException("No matching product found for the given ProductID");
+            //e.printStackTrace();
+            throw new ProductNotFoundException(APIConstants.PRODUCT_NOT_FOUND_ERROR_MESSAGE);
         }
         if (endPointResponse == null) {
-            throw new ProductNotFoundException("No matching product found for the given ProductID");
+            throw new ProductNotFoundException(APIConstants.PRODUCT_NOT_FOUND_ERROR_MESSAGE);
         }
         JSONObject requestJsonObject = new JSONObject(endPointResponse);
         ProductName productName = parseJson(requestJsonObject);

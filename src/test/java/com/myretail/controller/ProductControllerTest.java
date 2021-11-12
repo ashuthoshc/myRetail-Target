@@ -1,14 +1,17 @@
 package com.myretail.controller;
 
+import com.myretail.exception.ProductNotFoundException;
 import com.myretail.model.business.PriceInfo;
 import com.myretail.model.business.Product;
 import com.myretail.service.ProductService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -58,7 +61,17 @@ public class ProductControllerTest {
         System.out.println(result.getResponse());
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), true);
+        Assert.assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
         System.out.println("UnitTestSuccessful");
     }
 
+    @Test
+    public void notFoundStatusWhenProductNotFound() throws Exception {
+        Mockito.when(productService.getProductInfo(Mockito.anyLong())).thenThrow(new ProductNotFoundException(""));
+        String url = "/products/123456";
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE);
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        Assert.assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
+    }
 }

@@ -33,14 +33,14 @@ public class ProductController {
     public Product getProduct(@PathVariable("productID") Long productID) throws Exception {
         // This method throws IllegalArgumentException if productID value is
         // negative or is of type null.
-        if (productID == null || productID < 0) {
+        if (productID == null || productID <= 0) {
             throw new IllegalArgumentException("productID parameter cannot be null or less than 0");
         }
         Product product = productService.getProductInfo(productID);
         // This method throws ProductNotFoundException when ProductService is
         // unable
         // to retrieve the product details.
-        if (product.getName() == null || product.getId() == null) {
+        if (product == null || product.getName() == null || product.getId() == null) {
             throw new ProductNotFoundException("ProductID you are searching is not found");
         }
         return product;
@@ -68,7 +68,7 @@ public class ProductController {
         // This method returns Success or Failure message based on the response
         // from update operation.
         if (updated)
-            return "Given product with id " + productID + " is successfully updated";
+            return "{\"message\": \"Given product with id " + productID + " is successfully updated\"}";
         else
             return productID + " is not updated";
     }

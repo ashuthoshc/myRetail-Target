@@ -21,15 +21,19 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         if (ex instanceof IllegalArgumentException) {
             bodyOfResponse = ex.getMessage();
+            bodyOfResponse = "{\"error\":"+"\""+bodyOfResponse+"\"}";
             status = HttpStatus.BAD_REQUEST;
         } else if (ex instanceof ProductNotFoundException) {
             bodyOfResponse = ex.getMessage();
+            bodyOfResponse = "{\"error\":"+"\""+bodyOfResponse+"\"}";
             status = HttpStatus.NOT_FOUND;
         } else if (ex instanceof JSONException) {
             bodyOfResponse = "error parsing target json response object";
+            bodyOfResponse = "{\"error\":"+"\""+bodyOfResponse+"\"}";
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         } else {
             bodyOfResponse = "Internal Server Error";
+            bodyOfResponse = "{\"error\":"+"\""+bodyOfResponse+"\"}";
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
